@@ -1,0 +1,28 @@
+<ion-header>
+  <ion-navbar>
+    <ion-title>Начать новую игру</ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content padding>
+	<ion-list>
+		<!-- Изменение количества игроков -->
+  	<ion-item>
+    	<ion-label>Количество игроков: {{newGameParams.requiredPlayersCount}}</ion-label>
+			<button [disabled]="newGameParams.requiredPlayersCount==2" ion-button color="dark" clear icon-only item-end (click)="decrementPlayersCount()">
+				<ion-icon  name='remove-circle' is-active="false"></ion-icon>
+			</button>
+			<button [disabled]="newGameParams.requiredPlayersCount==6" ion-button color="dark" clear icon-only item-end (click)="incrementPlayersCount()">
+				<ion-icon name='add-circle' is-active="false"></ion-icon>
+			</button>
+  	</ion-item>
+		<!-- Изменение имени игрока -->
+		<ion-item>
+			<ion-label>Ваш ник</ion-label>
+    	<ion-input [(ngModel)]="newGameParams.playerName" type="text"></ion-input>
+		</ion-item>
+	</ion-list>
+
+	<button (click)="startGame()" ion-button block>Начать игру!</button>
+
+</ion-content>

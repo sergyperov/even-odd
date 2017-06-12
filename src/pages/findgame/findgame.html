@@ -1,0 +1,17 @@
+<ion-header>
+  <ion-navbar>
+    <ion-title>
+      Найти игру
+    </ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content padding>
+	<ion-list>
+    <ion-item *ngFor="let game of gameLogic.avaliableGames" (click)="connect(game.key)">
+			<h2>Игра от пользователя {{game.players[0].playerName}}</h2>
+    	<p *ngIf="game.playersRequiredCount > game.players.length">Требуется ещё {{game.playersRequiredCount - game.players.length}} игрок(а)</p>
+			<p *ngIf="game.playersRequiredCount == game.players.length">Свободных мест нет</p>
+    </ion-item>
+  </ion-list>
+</ion-content>

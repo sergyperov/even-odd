@@ -1,0 +1,78 @@
+<!--
+  Generated template for the Game page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<ion-header>
+
+  <ion-navbar>
+    <ion-title>Игра</ion-title>
+  </ion-navbar>
+
+</ion-header>
+
+
+<ion-content padding>
+	<div *ngIf="gameLogic.currentGameInfo != null">
+
+		<!-- Если игроков не достаточно -->
+		<div *ngIf="gameLogic.currentGameInfo.playersRequiredCount > gameLogic.currentGameInfo.players.length">
+			<h2>Ожидется ещё {{gameLogic.currentGameInfo.playersRequiredCount-gameLogic.currentGameInfo.players.length}} игрок(а)</h2>
+		</div>
+
+		<!-- Если игроков достаточно -->
+		<div *ngIf="gameLogic.currentGameInfo.playersRequiredCount == gameLogic.currentGameInfo.players.length">
+			<!-- Если игрок должен придумывать задание -->
+			<div *ngIf="gameLogic.mustGiveProblem  && (gameLogic.currentGameWinner == null)">
+				<h2> Загадайте число для игрока {{gameLogic.getNextPlayerInfo().playerName}} </h2>
+				<ion-input [(ngModel)]="newTaskParams.number" placeholder="Ваше число" type="text"></ion-input>
+				<button (click)="giveTask()" ion-button block>Загадать!</button>
+			</div>
+			<!-- Если игрок должен решать задание -->
+			<div *ngIf="gameLogic.mustSolveProblem  && (gameLogic.currentGameWinner == null)">
+				<h2> Игрок {{gameLogic.getPrevPlayerInfo().playerName}} загадал вам число </h2>
+				<h2> Оно... </h2>
+				<p>
+					 <button ion-button color="secondary" (click)="solveTask(0)" [disabled]="taskGuessed != null">
+						 Чётное
+					 </button>
+					 <button ion-button color="secondary" (click)="solveTask(1)" [disabled]="taskGuessed != null">
+						 Нечётное
+					 </button>
+				 </p>
+			</div>
+			<!-- Ожидание... -->
+			<div *ngIf="!gameLogic.mustSolveProblem && !gameLogic.mustGiveProblem && (gameLogic.currentGameWinner == null)">
+				<h2>Ждем Ваш ход</h2>
+			</div>
+			<!-- Когда игрок (не)отгадал задание -->
+			<div *ngIf="taskGuessed != null">
+				<h2> {{taskGuessedResult}} </h2>
+				<h2 *ngIf="taskGuessed == true" style="color:#32cd32">Вы угадали!</h2>
+				<h2 *ngIf="taskGuessed == false" style="color:#ff4500">Вы не угадали :(</h2>
+				<button ion-button color="secondary" (click)="submit(taskGuessed)">Продолжить</button>
+			</div>
+			<!-- Если игра закончена -->
+			<div *ngIf="gameLogic.currentGameWinner != null">
+				<h2>ИГРА ОКОНЧЕНА</h2>
+				<h2 *ngIf="gameLogic.currentGameWinner == gameLogic.playerName" style="color:#32cd32">Вы победили!</h2>
+				<h2 *ngIf="gameLogic.currentGameWinner != gameLogic.playerName" style="color:#ff4500">Вы проиграли :(</h2>
+				<h2 *ngIf="gameLogic.currentGameWinner != gameLogic.playerName">Победитель: {{gameLogic.currentGameWinner}}</h2>
+				<button ion-button color="secondary" (click)="exit()">Выйти из игры</button>
+			</div>
+
+			<!-- Таблица лидеров -->
+			<div *ngIf="gameLogic.playersLeaderTable" style="position: absolute; bottom: 0px; width: 100%">
+				<ion-list>
+					<ion-item *ngFor="let player of gameLogic.playersLeaderTable">
+      			<h2 *ngIf="player.playerName == gameLogic.playerName" style="color:#2bc5cc">{{player.playerName}} (Вы)</h2>
+						<h2 *ngIf="player.playerName != gameLogic.playerName">{{player.playerName}}</h2>
+      			<h2 *ngIf="player.playerName == gameLogic.playerName" item-end style="padding-right: 10px; color:#2bc5cc;">{{player.playerScore}}</h2>
+						<h2 *ngIf="player.playerName != gameLogic.playerName" item-end style="padding-right: 10px;">{{player.playerScore}}</h2>
+    			</ion-item>
+				</ion-list>
+			</div>
+	</div>
+</div>
+</ion-content>
